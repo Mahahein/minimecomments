@@ -4,7 +4,20 @@ class CommentsController < ApplicationController
   # GET /comments
   # GET /comments.json
   def index
-    @comments = Comment.all
+    
+	#@limit = request.query_parameters[:limit]
+	@date = request.query_parameters[:date]
+	respond_to do |format|
+		format.html { @comments = Comment.all }
+		format.json{
+			@comentarios = Comment.where("time_sent >= :start_date",{start_date:@date})
+			comentarios = []
+			@comentarios.each do |comentario|
+				comentarios << {:id => comentario.id, :user => comentario.user, :message => comentario.message, :time_sent => comentario.time_sent, :isFixed => comentario.isFixed}
+			end
+			render json: comentarios }
+	end
+
   end
 
   # GET /comments/1
