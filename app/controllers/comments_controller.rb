@@ -10,8 +10,9 @@ class CommentsController < ApplicationController
 	respond_to do |format|
 		format.html { @comments = Comment.all }
 		format.json{
-			@fijos = Comment.where("isFixed = true");
-			@comentarios = Comment.where("time_sent >= :start_date ",{start_date:@date})
+			@value = true
+			@fijos = Comment.where("isFixed == :val",{val:@value})
+			@comentarios = Comment.where("time_sent >= ? AND isFixed == ?",@date,false)
 			comentarios = []
 			@fijos.each do |comentario|
 				comentarios << {:id => comentario.id, :user => comentario.user, :message => comentario.message, :time_sent => comentario.time_sent, :isFixed => comentario.isFixed}
